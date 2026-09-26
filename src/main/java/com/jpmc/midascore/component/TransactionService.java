@@ -41,12 +41,10 @@ public class TransactionService {
         if (sender.getBalance() < amount) return;
 
         float incentive = 0f;
-        try {
-            Incentive resp = restTemplate.postForObject(incentiveUrl, tx, Incentive.class);
-            if (resp != null) {
-                incentive = Math.max(0f, resp.getAmount());
-            }
-        } catch (Exception ignored) { }
+        Incentive resp = restTemplate.postForObject(incentiveUrl, tx, Incentive.class);
+        if (resp != null) {
+            incentive = Math.max(0f, resp.getAmount());
+        }
 
         sender.setBalance(sender.getBalance() - amount);
         recipient.setBalance(recipient.getBalance() + amount + incentive);
